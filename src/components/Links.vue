@@ -37,6 +37,25 @@
       </SwiperSlide>
       <div class="swiper-pagination" />
     </Swiper>
+
+    <!-- iframe 弹窗 -->
+    <div class="iframe-overlay" v-if="iframeShow" @click="closeIframe">
+      <div class="iframe-box" @click.stop>
+        <close-one
+          class="close"
+          theme="filled"
+          size="28"
+          fill="#ffffff60"
+          @click="closeIframe"
+        />
+        <iframe
+          v-if="iframeUrl"
+          :src="iframeUrl"
+          class="iframe-content"
+          frameborder="0"
+        ></iframe>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,12 +63,26 @@
 import { Icon } from "@vicons/utils";
 // 可前往 https://www.xicons.org 自行挑选并在此处引入
 import { Link, Blog, CompactDisc, Cloud, Compass, Book, Fire, LaptopCode } from "@vicons/fa"; // 注意使用正确的类别
+import { CloseOne } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination, Mousewheel } from "swiper/modules";
 import siteLinks from "@/assets/siteLinks.json";
 
 const store = mainStore();
+
+// iframe 弹窗
+const iframeShow = ref(false);
+const iframeUrl = ref("");
+
+const openIframe = (url) => {
+  iframeUrl.value = url;
+  iframeShow.value = true;
+};
+
+const closeIframe = () => {
+  iframeShow.value = false;
+};
 
 // 计算网站链接
 const siteLinksList = computed(() => {
@@ -76,6 +109,8 @@ const siteIcon = {
 const jumpLink = (data) => {
   if (data.name === "音乐" && store.musicClick) {
     if (typeof $openList === "function") $openList();
+  } else if (data.name === "今日热榜") {
+    openIframe(data.link);
   } else {
     window.open(data.link, "_blank");
   }
@@ -176,6 +211,60 @@ onMounted(() => {
     }
     @media (max-width: 720px) {
       height: 180px;
+    }
+  }
+}
+
+// iframe 弹窗
+.iframe-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  background-color: #00000080;
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  .iframe-box {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: calc(50% - 300px);
+    left: calc(50% - 360px);
+    width: 720px;
+    height: 600px;
+    background-color: #ffffff66;
+    border-radius: 6px;
+    z-index: 1000;
+    @media (max-width: 800px) {
+      left: calc(50% - 45%);
+      width: 90%;
+      top: calc(50% - 200px);
+      height: 400px;
+    }
+    .close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      display: block;
+      z-index: 10;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.2);
+      }
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+    .iframe-content {
+      width: 95%;
+      height: 90%;
+      border-radius: 6px;
+      border: none;
     }
   }
 }
