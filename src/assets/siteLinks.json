@@ -2,36 +2,38 @@
   {
     "icon": "Blog",
     "name": "博客",
-    "link": "https://blog.imsyy.top/"
-  },
-  {
-    "icon": "Cloud",
-    "name": "网盘",
-    "link": "https://pan.imsyy.top/"
+    "link": "https://blog.akarin.online/"
   },
   {
     "icon": "CompactDisc",
     "name": "音乐",
-    "link": "https://music.imsyy.top/"
-  },
-  {
-    "icon": "Compass",
-    "name": "起始页",
-    "link": "https://nav.imsyy.top/"
-  },
-  {
-    "icon": "Book",
-    "name": "网址集",
-    "link": "https://web.imsyy.top/"
+    "link": ""
   },
   {
     "icon": "Fire",
     "name": "今日热榜",
-    "link": "https://hot.imsyy.top/"
+    "link": "https://trends.akarin.online/"
   },
   {
-    "icon": "LaptopCode",
-    "name": "站点监测",
-    "link": "https://status.imsyy.top/"
+    "icon": "Cloud",
+    "name": "校园跑打卡",
+    "link": "https://nuaarun.akarin.online/"
+  },
+  {
+    "icon": "Cloud",
+    "name": "日常打卡",
+    "link": "https://nuaarun.akarin.online/"
+  },
+
+  {
+    "icon": "Compass",
+    "name": "起始页",
+    "link": "https://akarin.online/"
+  },
+  {
+    "icon": "Book",
+    "name": "网址集",
+    "link": "https://x.akarin.online/"
   }
+
 ]

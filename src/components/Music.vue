@@ -55,6 +55,14 @@
             fill="#ffffff60"
             @click="closeMusicList()"
           />
+          <div class="player-config">
+            <select v-model="editServer" class="cfg-select">
+              <option value="netease">网易云</option>
+              <option value="tencent">QQ音乐</option>
+            </select>
+            <input v-model="editId" class="cfg-input" placeholder="歌单ID" />
+            <button class="cfg-btn" @click="loadPlaylist">加载</button>
+          </div>
           <Player
             ref="playerRef"
             :songServer="playerData.server"
@@ -95,17 +103,27 @@ const playerData = reactive({
   type: import.meta.env.VITE_SONG_TYPE,
   id: import.meta.env.VITE_SONG_ID,
 });
+const editServer = ref(import.meta.env.VITE_SONG_SERVER);
+const editId = ref(import.meta.env.VITE_SONG_ID);
+
+// 加载自定义歌单
+const loadPlaylist = () => {
+  playerData.server = editServer.value;
+  playerData.id = editId.value;
+  musicListShow.value = false;
+  nextTick(() => {
+    musicListShow.value = true;
+  });
+};
 
 // 开启播放列表
 const openMusicList = () => {
   musicListShow.value = true;
-  playerRef.value.toggleList();
 };
 
 // 关闭播放列表
 const closeMusicList = () => {
   musicListShow.value = false;
-  playerRef.value.toggleList();
 };
 
 // 音乐播放暂停
@@ -262,12 +280,14 @@ watch(
   .list {
     position: absolute;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     top: calc(50% - 300px);
     left: calc(50% - 320px);
     width: 640px;
     height: 600px;
+    padding-top: 48px;
     background-color: #ffffff66;
     border-radius: 6px;
     z-index: 999;
@@ -287,6 +307,55 @@ watch(
       }
       &:active {
         transform: scale(0.95);
+      }
+    }
+    .player-config {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px 12px;
+      z-index: 10;
+      .cfg-select {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ffffff40;
+        background: #ffffff26;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        option {
+          background: #333;
+          color: #fff;
+        }
+      }
+      .cfg-input {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ffffff40;
+        background: #ffffff26;
+        color: #fff;
+        font-size: 14px;
+        width: 180px;
+        outline: none;
+        &::placeholder {
+          color: #ffffff80;
+        }
+      }
+      .cfg-btn {
+        padding: 6px 16px;
+        border-radius: 6px;
+        border: 1px solid #ffffff40;
+        background: #ffffff26;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        &:hover {
+          background: #ffffff4d;
+        }
+        &:active {
+          transform: scale(0.95);
+        }
       }
     }
   }

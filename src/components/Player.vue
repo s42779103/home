@@ -10,7 +10,7 @@
     :order="store.playerOrder"
     :volume="volume"
     :showLrc="true"
-    :listFolded="listFolded"
+    :listFolded="true"
     :listMaxHeight="listMaxHeight"
     :noticeSwitch="false"
     @play="onPlay"
@@ -83,34 +83,46 @@ const listHeight = computed(() => {
   return props.listMaxHeight + "px";
 });
 
+// 加载播放列表
+const loadPlayerList = () => {
+  getPlayerList(props.songServer, props.songType, props.songId).then((res) => {
+    console.log(res);
+    store.musicIsOk = true;
+    playList.value = res;
+    console.log("音乐加载完成");
+    console.log(playList.value);
+    console.log(playIndex.value, playList.value.length, props.volume);
+  }).catch((err) => {
+    console.error(err);
+    store.musicIsOk = false;
+    ElMessage({
+      message: "播放器加载失败",
+      grouping: true,
+      icon: h(PlayWrong, {
+        theme: "filled",
+        fill: "#efefef",
+      }),
+    });
+  });
+};
+
 // 初始化播放器
 onMounted(() => {
   nextTick(() => {
-    try {
-      getPlayerList(props.songServer, props.songType, props.songId).then((res) => {
-        console.log(res);
-        // 更改播放器加载状态
-        store.musicIsOk = true;
-        // 生成歌单
-        playList.value = res;
-        console.log("音乐加载完成");
-        console.log(playList.value);
-        console.log(playIndex.value, playList.value.length, props.volume);
-      });
-    } catch (err) {
-      console.error(err);
-      store.musicIsOk = false;
-      ElMessage({
-        message: "播放器加载失败",
-        grouping: true,
-        icon: h(PlayWrong, {
-          theme: "filled",
-          fill: "#efefef",
-        }),
-      });
-    }
+    loadPlayerList();
   });
 });
+
+// 监听歌曲源/ID变化，自动重新加载
+watch(
+  () => [props.songServer, props.songId],
+  () => {
+    if (playList.value.length) {
+      playList.value = [];
+    }
+    loadPlayerList();
+  },
+);
 
 // 播放
 const onPlay = () => {
