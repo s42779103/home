@@ -3,7 +3,9 @@
   <div class="message">
     <!-- Logo -->
     <div class="logo">
-      <img class="logo-img" :src="siteLogo" alt="logo" />
+      <div class="logo-glass">
+	      <img class="logo-img" :src="siteLogo" alt="logo" />
+	    </div>
       <div :class="{ name: true, 'text-hidden': true, long: siteUrl[0].length >= 6 }">
         <span class="bg">{{ siteUrl[0] }}</span>
         <span class="sm">.{{ siteUrl[1] }}</span>
@@ -52,8 +54,8 @@ const siteUrl = computed(() => {
 
 // 简介区域文字
 const descriptionText = reactive({
-  hello: import.meta.env.VITE_DESC_HELLO,
-  text: import.meta.env.VITE_DESC_TEXT,
+  hello: import.meta.env.VITE_DESC_HELLO || "Hello World !",
+  text: import.meta.env.VITE_DESC_TEXT || "一个建立于 21 世纪的小站，存活于互联网的边缘",
 });
 
 // 切换右侧功能区
@@ -98,6 +100,30 @@ watch(
     .logo-img {
       border-radius: 50%;
       width: 120px;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+    }
+    .logo-glass {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .logo-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
     .name {
       width: 100%;
